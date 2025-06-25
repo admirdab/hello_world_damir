@@ -91,7 +91,7 @@ WITH first_touch AS (
 		DISTINCT ft.user_id
 	FROM first_touch ft
 	JOIN user_events ue ON ue.user_id = ft.user_id
-	WHERE event_time BETWEEN ft.first_day  AND ft.first_day + INTERVAL 7 DAY
+	WHERE event_time BETWEEN ft.first_day + INTERVAL 1 DAY  AND ft.first_day + INTERVAL 7 DAY
 		AND (ue.event_type = 'login' or ue.event_type = 'purchase')
 )
 ,returned_in_0day AS ( 
@@ -99,18 +99,18 @@ WITH first_touch AS (
 		user_id
 	FROM user_events
 	WHERE event_type = 'signup' 
-		AND toDate(event_time) = (SELECT toDate(MIN(event_time)) 
+		AND toDate(event_time) IN (SELECT toDate(event_time)
 							  	  FROM user_events 
-							  	  WHERE event_type = 'login')
+							  	  WHERE event_type = 'login' or event_type = 'purchase')
 )
 SELECT
-    (SELECT COUNT(DISTINCT user_id) FROM first_touch) AS total_users_day_0,
+    (SELECT COUNT(DISTINCT user_id) FROM returned_in_0day) AS total_users_day_0,
     (SELECT COUNT(DISTINCT user_id) FROM returned_in_7days) AS returned_in_7_days,
     ROUND(
         (SELECT COUNT(DISTINCT user_id) FROM returned_in_7days) * 100.0 /
         (SELECT COUNT(DISTINCT user_id) FROM first_touch),
         2
-    ) AS retention_7d_percent	
+    ) AS retention_7d_percent
 	
 
 
