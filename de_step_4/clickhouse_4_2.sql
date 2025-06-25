@@ -104,11 +104,11 @@ WITH first_touch AS (
 					   WHERE event_type = 'login' or event_type = 'purchase')
 )
 SELECT
-    (SELECT COUNT(DISTINCT user_id) FROM returned_in_0day) AS total_users_day_0,
-    (SELECT COUNT(DISTINCT user_id) FROM returned_in_7days) AS returned_in_7_days,
+    (SELECT COUNT(user_id) FROM returned_in_0day) AS total_users_day_0,
+    (SELECT COUNT(user_id) FROM returned_in_7days) AS returned_in_7_days,
     ROUND(
-        (SELECT COUNT(DISTINCT user_id) FROM returned_in_7days) * 100.0 /
-        (SELECT COUNT(DISTINCT user_id) FROM first_touch),
+        (SELECT COUNT(user_id) FROM returned_in_7days) * 100.0 /
+        (SELECT COUNT(user_id) FROM first_touch),
         2
     ) AS retention_7d_percent
 	
