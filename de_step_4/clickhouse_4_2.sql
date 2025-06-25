@@ -100,8 +100,8 @@ WITH first_touch AS (
 	FROM user_events
 	WHERE event_type = 'signup' 
 		AND toDate(event_time) IN (SELECT toDate(event_time)
-							  	  FROM user_events 
-							  	  WHERE event_type = 'login' or event_type = 'purchase')
+					   FROM user_events 
+					   WHERE event_type = 'login' or event_type = 'purchase')
 )
 SELECT
     (SELECT COUNT(DISTINCT user_id) FROM returned_in_0day) AS total_users_day_0,
