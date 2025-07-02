@@ -1,0 +1,13 @@
+Назначение пайплайна:
+  Миграция данных без дупликации о логинах пользователей с Postgre в Clickhouse с использованием брокера сообщений Kafka 
+  
+
+Использование:
+  1. Предварительно при отсутствии поле-флага в таблице user_logins в Postgre необходимо его добавить
+     "ALTER TABLE user_logins ADD COLUMN sent_to_kafka BOOLEAN DEFAULT FALSE;"
+  2. В терминале - "python producer.py"
+  3. Там же - "python consumer.py"
+
+
+
+  
