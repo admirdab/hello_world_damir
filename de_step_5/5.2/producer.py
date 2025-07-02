@@ -27,8 +27,7 @@ for row in rows:
     data = {
         "user": row[0],
         "event": row[1],
-        "timestamp": float(row[2])  # преобразуем Decimal → float
-    }
+        "timestamp": float(row[2])  
     producer.send("user_events", value=data)
     print("Sent:", data)
 
